@@ -1,6 +1,6 @@
 # pcount
 
-Small library to count message parts.
+Small library to count short message parts according to [https://smpp.io/concatenated-messages/](SMPP).
 
 ## How to use
 `MessageSplitMode` enum describes all possible at the moment message split algorithms, to calculate how many
@@ -43,3 +43,7 @@ public void returnZero() {
 ```
 
 If all test methods are named properly javadocs for them can be skipped.
+
+[SMPP]: https://smpp.io/concatenated-messages/
+
+[]: https://smpp.io/concatenated-messages/

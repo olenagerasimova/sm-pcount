@@ -1,7 +1,27 @@
 /*
- * Copyright (c) 2018 Zagruzka
+ * MIT License
+ *
+ * Copyright (c) 2020 olenagerasimova
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
-package com.zgr.pcount;
+package com.olenagerasimova.pcount;
 
 /**
  * Long messages split mode.
@@ -49,14 +69,14 @@ public enum MessageSplitMode implements Counter {
     private final int unicode;
 
     /**
-     * Gsm length.
+     * GsmValidator length.
      */
     private final int gsm;
 
     /**
      * Ctor.
      * @param unicode Unicode length
-     * @param gsm Gsm length
+     * @param gsm GsmValidator length
      */
     MessageSplitMode(final int unicode, final int gsm) {
         this.unicode = unicode;
@@ -88,7 +108,7 @@ public enum MessageSplitMode implements Counter {
         if (length == 0) {
             res = 1;
         } else {
-            final boolean isgsm = Gsm.isGsm(message);
+            final boolean isgsm = new GsmValidator(message).isGsm();
             if (isgsm && length <= MessageSplitMode.GSM_PART_LEN
                 || !isgsm && length <= MessageSplitMode.UNICODE_PART_LEN) {
                 res = 1;

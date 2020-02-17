@@ -1,19 +1,38 @@
 /*
- * Copyright (c) 2018 Zagruzka
+ * MIT License
+ *
+ * Copyright (c) 2020 olenagerasimova
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
-package com.zgr.pcount;
+package com.olenagerasimova.pcount;
 
 import java.nio.charset.Charset;
-import javax.validation.constraints.NotNull;
 
 /**
  * Group Special Mobile class can determine whether message is gsm or not.
  * @since 1.0
  */
-final class Gsm {
+final class GsmValidator {
 
     /**
-     * Gsm to unicode table.
+     * GsmValidator to unicode table.
      * @checkstyle ConstantNameCheck
      * @checkstyle RegexpMultilineCheck
      */
@@ -85,26 +104,32 @@ final class Gsm {
     };
 
     /**
-     * Ctor.
+     * Short Message.
      */
-    private Gsm() {
+    private final String message;
+
+    /**
+     * Ctor.
+     * @param message Short message
+     */
+    GsmValidator(final String message) {
+        this.message = message;
     }
 
     /**
      * Determine where message has only gsm default chars.
-     * @param message Message to check
      * @return True if message contains GSM symbols only
      * @checkstyle IllegalTokenCheck (10 lines)
      * @checkstyle MagicNumberCheck (10 lines)
      */
-    static boolean isGsm(@NotNull final String message) {
-        final byte[] bytes = message.getBytes(Charset.forName("UTF-16BE"));
+    boolean isGsm() {
+        final byte[] bytes = this.message.getBytes(Charset.forName("UTF-16BE"));
         int idx = 0;
         boolean res = true;
         while (idx < bytes.length) {
             final int code = ((int) bytes[idx++] & 0xFF) << 8
                 | ((int) bytes[idx++] & 0xFF);
-            if (Gsm.gsmCode(code) < 0 && Gsm.gsmExtensionCode(code) < 0) {
+            if (GsmValidator.gsmCode(code) < 0 && GsmValidator.gsmExtensionCode(code) < 0) {
                 res = false;
                 break;
             }
@@ -119,8 +144,8 @@ final class Gsm {
      */
     private static int gsmCode(final int unicode) {
         int res = -1;
-        for (int cur = 0; cur < Gsm.GSM_2_UNICODE.length; cur = cur + 1) {
-            if (unicode == Gsm.GSM_2_UNICODE[cur]) {
+        for (int cur = 0; cur < GsmValidator.GSM_2_UNICODE.length; cur = cur + 1) {
+            if (unicode == GsmValidator.GSM_2_UNICODE[cur]) {
                 res = cur;
                 break;
             }
@@ -135,9 +160,9 @@ final class Gsm {
      */
     private static int gsmExtensionCode(final int unicode) {
         int res = -1;
-        for (int cur = 0; cur < Gsm.GSM_EXT_UTF16.length; cur = cur + 1) {
-            if (Gsm.GSM_EXT_UTF16[cur] == unicode) {
-                res = Gsm.GSM_EXT_GSM[cur];
+        for (int cur = 0; cur < GsmValidator.GSM_EXT_UTF16.length; cur = cur + 1) {
+            if (GsmValidator.GSM_EXT_UTF16[cur] == unicode) {
+                res = GsmValidator.GSM_EXT_GSM[cur];
                 break;
             }
         }
